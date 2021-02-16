@@ -1,0 +1,209 @@
+service: squeazee
+plugins:
+  - serverless-dotenv-plugin
+  - serverless-offline  
+  - serverless-pseudo-parameters
+  - serverless-plugin-common-excludes
+  - serverless-plugin-include-dependencies
+  - serverless-api-cloudfront
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  profile: mavric
+  # role: LambdaRole
+  apiGateway:
+    minimumCompressionSize: 1024 # Enable gzip compression for responses > 1 KB
+  environment:
+    AWS_NODEJS_CONNECTION_REUSE_ENABLED: 1
+    #aurora
+    # AURORA_HOST: ${self:custom.AURORA.HOST}
+    # AURORA_PORT: ${self:custom.AURORA.PORT}
+    #postgresql
+    POSTGRESQL_HOST: ${self:custom.POSTGRESQL.HOST}
+    POSTGRESQL_PORT: ${self:custom.POSTGRESQL.PORT}
+    #common
+    DB_NAME: ${self:custom.DB_NAME}
+    USERNAME: ${self:custom.USERNAME}
+    PASSWORD: ${self:custom.PASSWORD}
+  stage: ${env:ENV}
+  region: ${env:AWS_REGION}
+
+custom:
+  apiCloudFront:
+    domain: ${env:COOKIE_DOMAIN}
+    certificate: arn:aws:acm:us-east-1:105223538344:certificate/d1f81c23-b9c4-423a-92d7-6ea077241f40
+    # waf: 00000000-0000-0000-0000-000000000000
+    compress: true
+    # logging:
+    #   bucket: my-bucket.s3.amazonaws.com
+    #   prefix: my-prefix
+    # cookies: none
+    # headers:
+    #   - x-api-key
+    # querystring:
+    #   - page
+    #   - per_page
+    priceClass: PriceClass_100
+    minimumProtocolVersion: TLSv1
+  DB_NAME: ${env:DATABASE_NAME}
+  USERNAME: ${env:DATABASE_ROOT_USERNAME}
+  PASSWORD: ${env:DATABASE_ROOT_PASSWORD}
+  AURORA:
+    # HOST:
+    #   Fn::GetAtt: [AuroraRDSCluster, Endpoint.Address]
+    # PORT:
+    #   Fn::GetAtt: [AuroraRDSCluster, Endpoint.Port]
+    VPC_CIDR: 10
+  POSTGRESQL:
+    HOST:
+      Fn::GetAtt: [PostgreSqlRDSInstance, Endpoint.Address]
+    PORT: ${env:DATABASE_PORT}
+  
+resources:
+  Resources:
+    LambdaRole: ${file(./resource/LambdaRole.yml)}
+    ServerlessInternetGateway: ${file(./resource/ServerlessInternetGateway.yml)}
+    ServerlessVPC: ${file(./resource/ServerlessVPC.yml)}
+    ServerlessVPCGA: ${file(./resource/ServerlessVPCGA.yml)}
+    ServerlessSubnetA: ${file(./resource/ServerlessSubnetA.yml)}
+    ServerlessSubnetB: ${file(./resource/ServerlessSubnetB.yml)}
+    ServerlessSubnetC: ${file(./resource/ServerlessSubnetC.yml)}
+    ServerlessSubnetGroup: ${file(./resource/ServerlessSubnetGroup.yml)}
+    ServerlessSecurityGroup: ${file(./resource/ServerlessSecurityGroup.yml)}
+    RouteTablePublic: ${file(./resource/RouteTablePublic.yml)}
+    RoutePublic: ${file(./resource/RoutePublic.yml)}
+    RouteTableAssociationSubnetA: ${file(./resource/RouteTableAssociationSubnetA.yml)}
+    RouteTableAssociationSubnetB: ${file(./resource/RouteTableAssociationSubnetB.yml)}
+    RouteTableAssociationSubnetC: ${file(./resource/RouteTableAssociationSubnetC.yml)}
+    # AuroraRDSClusterParameter: ${file(./resource/AuroraRDSClusterParameter.yml)}
+    # AuroraRDSInstanceParameter: ${file(./resource/AuroraRDSInstanceParameter.yml)}
+    # AuroraRDSCluster: ${file(./resource/AuroraRDSCluster.yml)}
+    # AuroraRDSInstance: ${file(./resource/AuroraRDSInstance.yml)}
+    PostgreSqlRDSInstance: ${file(./resource/PostgreSqlRDSInstance.yml)}
+      
+
+# you can add packaging information here
+package:
+ excludeDevDependencies: false
+ include:
+  - dist/**
+  - node_modules/bcryptjs/**
+  # - node_modules/apollo-server-lambda/**
+  # - node_modules/chalk/**
+  # - node_modules/graphql-type-json/**
+  # - node_modules/looger/**
+  # - node_modules/short-uuid/**
+  # - node_modules/typeorm/**
+
+ exclude:
+  - src/**
+  - scripts/**
+  - resource/**
+  - .env
+  - .env.*
+  - node_modules/**
+  # - node_modules/@apso/cli
+  # - node_modules/@babel/core
+  # - node_modules/@types/aws-sdk
+  # - node_modules/@types/**
+  # - node_modules/@typescript-eslint/eslint-plugin
+  # - node_modules/@typescript-eslint/parser
+  # - node_modules/chai
+  # - node_modules/mocha
+  # - node_modules/node-dev
+  # - node_modules/nodemon
+  # - node_modules/prettier
+  # - node_modules/serverless
+  # - node_modules/serverless-dotenv-plugin
+  # - node_modules/serverless-offline
+  # - node_modules/serverless-plugin-include-dependencies
+  # - node_modules/serverless-plugin-typescript
+  # - node_modules/serverless-pseudo-parameters
+  # - node_modules/sinon
+  # - node_modules/squeazee-types
+  # - node_modules/style-loader
+  # - node_modules/ts-loader
+  # - node_modules/ts-node
+  # - node_modules/typescript
+  # - node_modules/url-loader
+
+functions:
+  apso:
+    handler: dist/index.handler
+    events:
+      - http: ANY /
+      - http: 'ANY {proxy+}'
+
+# Resources:
+#   ServerlessVPC:
+#     Type: AWS::EC2::VPC
+#     Properties:
+#       CidrBlock: "10.0.0.0/16"
+#   ServerlessSubnetA:
+#     DependsOn: ServerlessVPC
+#     Type: AWS::EC2::Subnet
+#     Properties:
+#       VpcId:
+#         Ref: ServerlessVPC
+#       AvailabilityZone: ${env:AWS_REGION}a
+#       CidrBlock: "10.0.0.0/24"
+#   ServerlessSubnetB:
+#     DependsOn: ServerlessVPC
+#     Type: AWS::EC2::Subnet
+#     Properties:
+#       VpcId:
+#         Ref: ServerlessVPC
+#       AvailabilityZone: ${env:AWS_REGION}c
+#       CidrBlock: "10.0.1.0/24"
+#   ServerlessSubnetC:
+#     DependsOn: ServerlessVPC
+#     Type: AWS::EC2::Subnet
+#     Properties:
+#       VpcId:
+#         Ref: ServerlessVPC
+#       AvailabilityZone: ${env:AWS_REGION}d
+#       CidrBlock: "10.0.2.0/24"
+#   ServerlessSecurityGroup:
+#     DependsOn: ServerlessVPC
+#     Type: AWS::EC2::SecurityGroup
+#     Properties:
+#       GroupDescription: SecurityGroup for Serverless Functions
+#       VpcId:
+#         Ref: ServerlessVPC
+#   ServerlessStorageSecurityGroup:
+#     DependsOn: ServerlessVPC
+#     Type: AWS::EC2::SecurityGroup
+#     Properties:
+#       GroupDescription: Ingress for RDS Instance
+#       VpcId:
+#         Ref: ServerlessVPC
+#       SecurityGroupIngress:
+#       - IpProtocol: tcp
+#         FromPort: '5432'
+#         ToPort: '5432'
+#         SourceSecurityGroupId:
+#           Ref: ServerlessSecurityGroup
+#   ServerlessRDSSubnetGroup:
+#     Type: AWS::RDS::DBSubnetGroup
+#     Properties:
+#       DBSubnetGroupDescription: "RDS Subnet Group"
+#       SubnetIds:
+#       - Ref: ServerlessSubnetA
+#       - Ref: ServerlessSubnetB
+#       - Ref: ServerlessSubnetC
+#   ServerlessRDSCluster:
+#     DependsOn: ServerlessStorageSecurityGroup
+#     Type: AWS::RDS::DBInstance
+#     Properties:
+#       Engine: aurora-postgresql
+#       EngineMode: serverless
+#       DBName: ${env:DATABASE_NAME}
+#       MasterUsername: root
+#       MasterUserPassword: root
+#       DBInstanceClass: db.m4.large
+#       AllocatedStorage: 10
+#       VPCSecurityGroups:
+#       - "Fn::GetAtt": ServerlessStorageSecurityGroup.GroupId
+#       DBSubnetGroupName:
+#         Ref: ServerlessRDSSubnetGroup

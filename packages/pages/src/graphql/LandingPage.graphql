@@ -1,0 +1,17 @@
+type JSONBody {
+  name: String!
+  headline: String!
+  bodyText: String!
+  emailPlaceholder: String!
+  submitButtonText: String!
+  redirectUrl: String!
+  background: String!
+}
+
+
+query GetPublicLandingPage($slug: String!) {
+  getPublicLandingPage(slug: $slug) {
+    slug
+    jsonBody
+  }
+}

@@ -1,0 +1,46 @@
+type UserInput {
+    name: String!
+email: String!
+  }
+
+  type CreateUserInput {
+    name: String!
+email: String!
+  }
+
+  query Me {
+    me {
+      email
+      name
+    }
+  }
+  
+  query GetUser($id: Float!) {
+    getUser(id: $id) {
+      name
+email
+    }
+  }
+
+  query GetUsers {
+    getUsers {
+      name
+email
+    }
+  }
+
+  mutation CreateUser($data: CreateUserInput!) {
+    createUser(data: $data) {
+      id
+      name
+email
+    }
+  }
+  
+  mutation UpdateMe($data: CreateUserInput!) {
+    updateMe(data: $data) {
+      name
+      email
+    }
+  }
+ 

@@ -1,0 +1,52 @@
+type JSONBody {
+  name: String!
+  headline: String!
+  bodyText: String!
+  emailPlaceholder: String!
+  submitButtonText: String!
+  redirectUrl: String!
+  background: String!
+}
+
+type UpdateLandingPageInput {
+    id: Float!
+    jsonBody: JSONBody
+  }
+
+  type CreateLandingPageInput {
+    jsonBody: JSONBody
+  }
+
+  query GetLandingPage($id: Float!) {
+    getLandingPage(id: $id) {
+      slug
+      jsonBody
+    }
+  }
+
+  query GetLandingPages {
+    getLandingPages {
+      id
+      slug
+      jsonBody
+      leadCount
+      updatedAt
+    }
+  }
+
+  mutation CreateLandingPage($data: CreateLandingPageInput!) {
+    createLandingPage(data: $data) {
+      id
+      slug
+jsonBody
+    }
+  }
+  
+  mutation UpdateLandingPage($data: UpdateLandingPageInput!) {
+    updateLandingPage(data: $data) {
+      id
+      slug
+      jsonBody
+    }
+  }
+ 

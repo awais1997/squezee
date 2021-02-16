@@ -1,0 +1,30 @@
+{
+  "compilerOptions": {
+      "lib": ["es5", "es6"],
+      "target": "es6",
+      "module": "commonjs",
+      "moduleResolution": "node",
+      "emitDecoratorMetadata": true,
+      "experimentalDecorators": true,
+      "sourceMap": true,
+      "preserveSymlinks": true,
+      "noEmitOnError": true,
+      "strictNullChecks": true,
+      "forceConsistentCasingInFileNames": true,
+      "resolveJsonModule": true,
+      "noUnusedLocals": false,
+      "noUnusedParameters": false,
+      "allowSyntheticDefaultImports": true,
+      "esModuleInterop": true,
+      "outDir": "dist"
+  },
+  "include": [
+    "src/**/*"
+  ],
+  "exclude": [
+    "config",
+    "node_modules",
+    "scripts",
+    "acceptance-tests",
+  ]
+}

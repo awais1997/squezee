@@ -1,0 +1,89 @@
+{
+  "name": "squeazee-server",
+  "version": "0.0.3",
+  "publishConfig": {
+    "access": "restricted"
+  },
+  "scripts": {
+    "predeploy": "npm run build",
+    "compose": "./scripts/apso-compose.sh",
+    "provision": "./scripts/apso-provision.sh",
+    "prettier": "prettier --write \"src/**/*.{ts,tsx,css}\"",
+    "build": "tsc",
+    "start:debug": "SLS_DEBUG=* DEBUG=* npm start",
+    "start": "AWS_REGION=us-west-2 sls offline start --httpPort 3100",
+    "watch": "nodemon --watch src --exec \"yarn build && yarn start\"",
+    "test": "mocha --require ts-node/register/transpile-only --reporter spec --timeout 30000 --slow 1000 --exit ./tests/**/*",
+    "deploy:staging": "npm run build && cp -p .env.staging ./dist/.env && AWS_REGION=us-west-2 sls deploy --stage staging"
+  },
+  "dependencies": {
+    "@apso/server": "^0.0.5",
+    "apollo-server-express": "^2.14.4",
+    "apollo-server-lambda": "^2.15.0",
+    "aws-sdk": "^2.585.0",
+    "axios": "^0.19.1",
+    "bcrypt": "^3.0.7",
+    "bcryptjs": "^2.4.3",
+    "components": "^0.1.0",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "goa": "^3.0.1",
+    "graphql": "^14.5.6",
+    "graphql-type-json": "^0.3.2",
+    "jsonwebtoken": "^8.5.1",
+    "looger": "^4.1.0",
+    "sahara": "^5.0.2",
+    "short-uuid": "^3.1.1",
+    "stripe": "^8.77.0",
+    "type-graphql": "^0.17.5",
+    "typeorm": "^0.2.25"
+  },
+  "devDependencies": {
+    "@apso/cli": "^0.0.3",
+    "@babel/core": "^7.2.2",
+    "@types/aws-sdk": "^2.7.0",
+    "@types/bcrypt": "^3.0.0",
+    "@types/chai": "^4.2.7",
+    "@types/graphql": "^14.5.0",
+    "@types/jsonwebtoken": "^8.3.5",
+    "@types/mocha": "^7.0.2",
+    "@types/node": "12.12.7",
+    "@types/sinon": "^7.5.1",
+    "@typescript-eslint/eslint-plugin": "^2.8.0",
+    "@typescript-eslint/parser": "^2.8.0",
+    "chai": "^4.2.0",
+    "mocha": "^8.0.1",
+    "node-dev": "^4.0.0",
+    "nodemon": "^2.0.4",
+    "prettier": "^1.15.3",
+    "serverless": "^1.73.1",
+    "serverless-api-cloudfront": "^0.9.5",
+    "serverless-dotenv-plugin": "^2.4.2",
+    "serverless-offline": "^6.4.0",
+    "serverless-plugin-common-excludes": "^3.0.0",
+    "serverless-plugin-include-dependencies": "^4.1.0",
+    "serverless-plugin-typescript": "^1.1.9",
+    "serverless-pseudo-parameters": "^2.5.0",
+    "sinon": "^8.1.1",
+    "squeazee-types": "../types",
+    "style-loader": "^0.23.1",
+    "ts-loader": "^5.3.3",
+    "ts-node": "^8.10.2",
+    "typescript": "^3.2.4",
+    "url-loader": "^1.1.2"
+  },
+  "nodemonConfig": {
+    "ignore": [
+      "**/*.test.ts",
+      "**/*.spec.ts",
+      ".git",
+      "node_modules"
+    ],
+    "watch": [
+      "src"
+    ],
+    "exec": "yarn start",
+    "ext": "ts"
+  },
+  "gitHead": "7541b778d120ad4cf32a06000fb22f893f6fac8c"
+}

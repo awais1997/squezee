@@ -1,0 +1,9 @@
+type CreatePaymentInput {
+  token: String!
+}
+
+mutation CreatePayment($data: CreatePaymentInput!) {
+  createPayment(data: $data) {
+    token
+  }
+}

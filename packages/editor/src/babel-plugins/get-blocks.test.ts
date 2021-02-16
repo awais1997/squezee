@@ -1,0 +1,32 @@
+import { testPlugin } from './test-util'
+import Plugin from './get-blocks'
+
+// @ts-expect-error ts-migrate(2582) FIXME: Cannot find name 'test'. Do you need to install ty... Remove this comment to see the full error message
+test('should update internal Plugin state with root block children name and id', () => {
+  const plugin = new Plugin()
+  // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'expect'.
+  expect(plugin.state).toEqual({ blocks: [] })
+
+  testPlugin(
+    plugin.plugin,
+    `<Blocks.Root><HeaderBasic ___uuid="abc">Hello, world!</HeaderBasic></Blocks.Root>`
+  )
+
+  // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'expect'.
+  expect(plugin.state).toEqual({ blocks: [{ id: 'abc', name: 'HeaderBasic' }] })
+})
+
+// @ts-expect-error ts-migrate(2582) FIXME: Cannot find name 'test'. Do you need to install ty... Remove this comment to see the full error message
+test('should not update internal Plugin state when no Blocks Root element preset', () => {
+  const plugin = new Plugin()
+  // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'expect'.
+  expect(plugin.state).toEqual({ blocks: [] })
+
+  testPlugin(
+    plugin.plugin,
+    `<HeaderBasic ___uuid="abc">Hello, world!</HeaderBasic>`
+  )
+
+  // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'expect'.
+  expect(plugin.state).toEqual({ blocks: [] })
+})

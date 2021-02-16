@@ -1,0 +1,35 @@
+type MembershipInput {
+    id: Float!
+    active: Boolean!
+  }
+
+  type CreateMembershipInput {
+    active: Boolean!
+  }
+
+  query GetMembership($id: Float!) {
+    getMembership(id: $id) {
+      active
+    }
+  }
+
+  query GetMemberships {
+    getMemberships {
+      active
+    }
+  }
+
+  mutation CreateMembership($data: CreateMembershipInput!) {
+    createMembership(data: $data) {
+      id
+      active
+    }
+  }
+  
+  mutation UpdateMembership($data: MembershipInput!) {
+    updateMembership(data: $data) {
+      id
+      active
+    }
+  }
+ 

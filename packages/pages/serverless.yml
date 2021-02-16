@@ -1,0 +1,32 @@
+service: squeazee-page
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  profile: mavric
+
+plugins:
+  - serverless-finch
+  - serverless-dotenv-plugin
+  - serverless-certificate-creator
+  - serverless-domain-manager
+
+custom:
+  client:
+    bucketName: squeazee-page-${env:ENV}
+    distributionFolder: build 
+    indexDocument: index.html
+    errorDocument: index.html
+  customDomain:
+    domainName: staging.squeezepage.io
+    certificateName: 'staging.squeezepage.io'
+    basePath: ''
+    stage: ${self:provider.stage}
+    createRoute53Record: true
+  customCertificate:
+    certificateName: 'staging.squeezepage.io' #//required
+    idempotencyToken: 'stagingsqueezepageio' #//optional
+    hostedZoneNames: 'squeezepage.io.' #//required if hostedZoneIds is not set 
+    region: us-east-1 #// optional - default is us-east-1 which is required for custom api gateway domains of Type Edge (default)
+    enabled: true #// optional - default is true. For some stages you may not want to use certificates (and custom domains associated with it).
+    rewriteRecords: false

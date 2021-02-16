@@ -1,0 +1,34 @@
+type PaymentInput {
+  id: String!
+  token: String!
+}
+
+type CreatePaymentInput {
+  token: String!
+}
+
+query GetPayment($id: Float!) {
+  getPayment(id: $id) {
+    token
+  }
+}
+
+query GetPayments {
+  getPayments {
+    token
+  }
+}
+
+mutation CreatePayment($data: CreatePaymentInput!) {
+  createPayment(data: $data) {
+    id
+    token
+  }
+}
+
+mutation UpdatePayment($data: PaymentInput!) {
+  updatePayment(data: $data) {
+    id
+    token
+  }
+}

@@ -1,0 +1,11 @@
+type CreateLeadInput {
+  slug: String
+  email: String
+}
+
+mutation CreateLead($data: CreateLeadInput!) {
+  createLead(data: $data) {
+    date
+  }
+}
+

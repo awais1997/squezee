@@ -1,0 +1,5 @@
+export const Logo1 = require('./Logo-02.png')
+export const Logo2 = require('./Logo-01.png')
+export const Logo3 = require('./word-logo.svg')
+export const Icon = require('./Icon.png')
+export const MavricIcon = require('./mavric.png')

@@ -1,0 +1,41 @@
+type AccountInput {
+    id: Float!
+    name: String!
+stripe_customer_id: String!
+  }
+
+  type CreateAccountInput {
+    name: String!
+stripe_customer_id: String!
+  }
+
+  query GetAccount($id: Float!) {
+    getAccount(id: $id) {
+      name
+stripe_customer_id
+    }
+  }
+
+  query GetAccounts {
+    getAccounts {
+      name
+stripe_customer_id
+    }
+  }
+
+  mutation CreateAccount($data: CreateAccountInput!) {
+    createAccount(data: $data) {
+      id
+      name
+stripe_customer_id
+    }
+  }
+  
+  mutation UpdateAccount($data: AccountInput!) {
+    updateAccount(data: $data) {
+      id
+      name
+stripe_customer_id
+    }
+  }
+ 

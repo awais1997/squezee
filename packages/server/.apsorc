@@ -1,0 +1,190 @@
+{
+    "entities": [
+        {
+            "name": "Account",
+            "fields": [
+                {
+                    "name": "name",
+                    "type": "text"
+                },
+                {
+                    "name": "stripe_customer_id",
+                    "type": "text"
+                }
+            ],
+            "associations": [
+                {
+                    "name": "Membership",
+                    "type": "OneToMany"
+                },
+                 {
+                    "name": "Plan",
+                    "type": "ManyToOne"
+                }
+            ]
+        },
+        {
+            "name": "User",
+            "fields": [
+                {
+                    "name": "name",
+                    "type": "text"
+                },
+                {
+                    "name": "email",
+                    "type": "text"
+                }
+            ],
+            "associations": [
+                {
+                    "name": "Membership",
+                    "type": "OneToMany"
+                },
+                 {
+                    "name": "Authorization",
+                    "type": "OneToMany"
+                }
+            ]
+        },
+        {
+            "name": "Membership",
+            "fields": [
+                {
+                    "name": "active",
+                    "type": "boolean"
+                }
+            ],
+            "associations": [
+                {
+                    "name": "Account",
+                    "type": "ManyToOne"
+                },
+                 {
+                    "name": "User",
+                    "type": "ManyToOne"
+                }
+            ]
+        },
+        {
+            "name": "Authorization",
+            "fields": [
+                {
+                    "name": "provider",
+                    "type": "enum",
+                    "values":[
+                        "password",
+                        "google",
+                        "facebook",
+                        "twitter",
+                        "slack"
+                    ]
+                },
+                {
+                    "name": "email",
+                    "type": "text",
+                    "nullable": true
+                },
+                {
+                    "name": "password",
+                    "type": "text",
+                    "nullable": true
+                },
+                {
+                    "name": "tokenVersion",
+                    "type": "text",
+                    "nullable": true
+                },
+                {
+                    "name": "active",
+                    "type": "boolean"
+                }
+            ],
+            "associations": [
+                {
+                    "name": "User",
+                    "type": "ManyToOne"
+                }
+            ]
+        },
+        {
+            "name": "Plan",
+            "fields": [
+                {
+                    "name": "active",
+                    "type": "boolean"
+                },
+                {
+                    "name": "features",
+                    "type": "array"
+                },
+                {
+                    "name": "stripe_subscription_id",
+                    "type": "text"
+                }
+            ],
+            "associations": [
+                {
+                    "name": "Account",
+                    "type": "OneToMany"
+                }
+            ]
+        },
+        {
+            "name": "LandingPage",
+            "fields": [
+                {
+                   "name": "slug",
+                   "type": "text"
+                },
+                {
+                    "name": "jsonBody",
+                    "type": "json"
+                }
+            ],
+            "associations": [
+                {
+                    "name": "Account",
+                    "type": "ManyToOne"
+                }
+            ]
+
+        },
+        {
+            "name": "Lead",
+            "fields": [
+                {
+                   "name": "email",
+                   "type": "text"
+                }
+            ],
+            "associations": [
+                {
+                    "name": "LandingPage",
+                    "type": "ManyToOne"
+                }                
+            ]
+
+        } ,{
+            "name": "Payment",
+            "fields": [
+                {
+                    "name": "token",
+                    "type": "json",
+                    "nullable": true
+                }
+            ]
+
+        },{
+            "name": "File",
+            "fields": [
+                {
+                    "name": "filename",
+                    "type": "file"
+                }
+            ]
+
+        }
+
+
+    ]
+}

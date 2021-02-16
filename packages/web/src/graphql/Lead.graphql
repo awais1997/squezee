@@ -1,0 +1,9 @@
+  query GetLeadsMetrics {
+    getLeadsMetrics {
+      landingPageId
+      count
+      date
+      title
+    }
+  }
+ 

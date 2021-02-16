@@ -1,0 +1,51 @@
+type InvoiceInput {
+  paymentMethodId: String!
+  customerId: String!
+  invoiceId: String!
+}
+
+type SubscriptionInput {
+  paymentMethodId: String!
+  customerId: String!
+  priceId: String!
+}
+
+query GetPlans {
+  getPlans {
+    title
+    price
+    subheader
+    description
+    buttonText
+    buttonVariant
+    planId
+  }
+}
+
+query GetCurrentPlan {
+  getCurrentPlan {
+    title
+    price
+    subheader
+    description
+    buttonText
+    buttonVariant
+    planId
+  }
+}
+
+mutation RetryInvoice($data: InvoiceInput!) {
+  retryInvoice(data: $data) {
+    paymentMethodId
+    customerId
+    invoiceId
+  }
+}
+
+mutation CreateSubscription($data: SubscriptionInput!) {
+  createSubscription(data: $data) {
+    paymentMethodId
+    customerId
+    priceId
+  }
+}
